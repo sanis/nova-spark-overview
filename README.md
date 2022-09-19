@@ -20,7 +20,9 @@ This [Nova](https://nova.laravel.com) tool lets you:
 
 ## Disclaimer
 
-This package has been heavily inspired by [themsaid/nova-spark-manager](https://github.com/themsaid/nova-spark-manager) and was created to be in sync with latest changes in Cashier as well as to optimize default loads by avoiding a Stripe API request unless it's needed. Structure of this repository was inspired by [spatie/skeleton-nova-tool](https://github.com/spatie/skeleton-nova-tool).
+This Package is an edited version of [LimeDeck/nova-cashier-overview](LimeDeck/nova-cashier-overview) to allow spark plan integration.
+
+[LimeDeck/nova-cashier-overview](LimeDeck/nova-cashier-overview) was heavily inspired by [themsaid/nova-cashier-manager](https://github.com/themsaid/nova-cashier-manager) and was created to be in sync with latest changes in Cashier as well as to optimize default loads by avoiding a Stripe API request unless it's needed. Structure of this repository was inspired by [spatie/skeleton-nova-tool](https://github.com/spatie/skeleton-nova-tool).
 
 ## Installation
 
@@ -66,7 +68,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email rudolf@rhyslees.io instead of using the issue tracker.
+If you discover any security related issues, please email info@rhyslees.co.uk instead of using the issue tracker.
 
 ## License
 

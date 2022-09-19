@@ -6,6 +6,16 @@
         "nova"
     ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Rhys Lees",
+            "email": "43909932+RhysLees@users.noreply.github.com"
+        },
+        {
+            "name": "LimeDeck",
+            "email": "mail@limedeck.io"
+        }
+    ],
     "repositories": [
         {
             "type": "composer",
