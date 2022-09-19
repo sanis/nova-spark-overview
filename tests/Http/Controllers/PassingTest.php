@@ -1,8 +1,8 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Tests\Http\Controllers;
+namespace RhysLees\NovaSparkOverview\Tests\Http\Controllers;
 
-use LimeDeck\NovaCashierOverview\Tests\TestCase;
+use RhysLees\NovaSparkOverview\Tests\TestCase;
 
 class PassingTest extends TestCase
 {

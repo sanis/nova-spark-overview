@@ -1,9 +1,9 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Tests;
+namespace RhysLees\NovaSparkOverview\Tests;
 
-use LimeDeck\NovaCashierOverview\Providers\CashierOverviewServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use RhysLees\NovaSparkOverview\Providers\SparkOverviewServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -16,7 +16,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            CashierOverviewServiceProvider::class,
+            SparkOverviewServiceProvider::class,
         ];
     }
 }

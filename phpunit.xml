@@ -4,14 +4,13 @@
          backupStaticAttributes="false"
          colors="true"
          verbose="true"
-         printerClass="LimeDeck\Testing\Printer"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="LimeDeck Test Suite">
+        <testsuite name="RhysLees Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

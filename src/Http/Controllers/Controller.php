@@ -1,6 +1,6 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Http\Controllers;
+namespace RhysLees\NovaSparkOverview\Http\Controllers;
 
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;

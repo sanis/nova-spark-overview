@@ -1,25 +1,48 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Http\Controllers;
+namespace RhysLees\NovaSparkOverview\Http\Controllers;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
+use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Subscription;
+use ReflectionClass;
+use Spark\Spark;
 use Stripe\Plan;
 use Stripe\Subscription as StripeSubscription;
 
 class StripeSubscriptionsController extends Controller
 {
     /**
-     * @param $subscriptionId
+     * @param $billableId
      * @return array
      *
      * @throws \Stripe\Exception\ApiErrorException
      */
-    public function show($subscriptionId)
+    public function show($billableId)
     {
+        // /** @var \Laravel\Cashier\Subscription $subscription */
+        // $subscription = Subscription::find($subscriptionId);
+
+        // if (! $subscription) {
+        //     return [
+        //         'subscription' => null,
+        //     ];
+        // }
+
+        $customerModel = Cashier::$customerModel;
+
+
+        /** @var \Illuminate\Database\Eloquent\Model $billableModel */
+        $billableModel = (new $customerModel());
+
+        /** @var \Laravel\Cashier\Billable|\Illuminate\Database\Eloquent\Model $billable */
+        $billable = $billableModel->find($billableId);
+
         /** @var \Laravel\Cashier\Subscription $subscription */
-        $subscription = Subscription::find($subscriptionId);
+        $subscription = $billable->subscription(
+            $this->request->query('subscription', 'default')
+        );
 
         if (! $subscription) {
             return [
@@ -27,9 +50,39 @@ class StripeSubscriptionsController extends Controller
             ];
         }
 
+        $plan = $billable->sparkPlan()->name;
+
+        ray($plan);
+
+
+        $plans = Spark::plans(strtolower(class_basename($billable)));
+
+        // $plans = $plans->each(function ($plan) {
+        //     ray($plan);
+        //     $plan->price = Plan::price($plan->price);
+        // });
+
+        $stripePlans = collect(Plan::all([
+            'limit' => 100,
+            'active' => true,
+        ])->data);
+
+        ray($plans, $stripePlans);
+
+        $plans = $plans->each(function ($plan) use ($stripePlans) {
+            $stripePlan = $stripePlans->firstWhere('id', $plan->id);
+
+            $plan->price = $stripePlan->amount;
+            $plan->currency = $stripePlan->currency;
+            $plan->interval = $stripePlan->interval;
+            $plan->interval_count = $stripePlan->interval_count;
+        });
+
+        ray($plans);
+
         return [
-            'subscription' => $this->formatSubscription($subscription),
-            'plans' => $this->formatPlans(Plan::all(['limit' => 100])),
+            'subscription' => $this->formatSubscription($subscription, $plan),
+            'plans' => $this->formatPlans($plans),
             'invoices' => $this->formatInvoices($subscription->owner->invoicesIncludingPending()),
         ];
     }
@@ -88,16 +141,17 @@ class StripeSubscriptionsController extends Controller
      *
      * @throws \Stripe\Exception\ApiErrorException
      */
-    protected function formatSubscription(Subscription $subscription)
+    protected function formatSubscription(Subscription $subscription, $plan)
     {
         $stripeSubscription = StripeSubscription::retrieve($subscription->stripe_id);
 
         return array_merge($subscription->toArray(), [
             'plan_amount' => $stripeSubscription->plan->amount,
+            'plan_amount_formatted' => Cashier::formatAmount($stripeSubscription->plan->amount, $stripeSubscription->plan->currency),
             'plan_interval' => $stripeSubscription->plan->interval,
             'plan_currency' => $stripeSubscription->plan->currency,
             'plan' => $subscription->stripe_plan,
-            'stripe_plan' => $stripeSubscription->plan->id,
+            'stripe_plan' => $plan,
             'ended' => $subscription->ended(),
             'canceled' => $subscription->canceled(),
             'active' => $subscription->active(),
@@ -117,15 +171,17 @@ class StripeSubscriptionsController extends Controller
     /**
      * Format the plans collection.
      *
-     * @param  \Stripe\Collection  $plans
      * @return array
      */
     protected function formatPlans($plans)
     {
-        return collect($plans->data)->map(function (Plan $plan) {
+        // ray ($plans->toArray());
+        return $plans->map(function ($plan) {
             return [
                 'id' => $plan->id,
-                'price' => $plan->amount,
+                'name' => $plan->name,
+                'price' => $plan->price,
+                'price_formatted' => Cashier::formatAmount($plan->price, $plan->currency),
                 'interval' => $plan->interval,
                 'currency' => $plan->currency,
                 'interval_count' => $plan->interval_count,
@@ -143,6 +199,7 @@ class StripeSubscriptionsController extends Controller
             return [
                 'id' => $invoice->id,
                 'total' => $invoice->total,
+                'total_formatted' => Cashier::formatAmount($invoice->total, $invoice->currency),
                 'attempted' => $invoice->attempted,
                 'charge_id' => $invoice->charge,
                 'currency' => $invoice->currency,

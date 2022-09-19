@@ -1,13 +1,13 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Providers;
+namespace RhysLees\NovaSparkOverview\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
-class CashierOverviewServiceProvider extends ServiceProvider
+class SparkOverviewServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -21,7 +21,7 @@ class CashierOverviewServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-cashier-overview', __DIR__.'/../../dist/js/tool.js');
+            Nova::script('nova-spark-overview', __DIR__.'/../../dist/js/tool.js');
         });
     }
 
@@ -37,8 +37,8 @@ class CashierOverviewServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova'])
-            ->namespace('LimeDeck\NovaCashierOverview\Http\Controllers')
-            ->prefix('nova-vendor/nova-cashier-overview')
+            ->namespace('RhysLees\NovaSparkOverview\Http\Controllers')
+            ->prefix('nova-vendor/nova-spark-overview')
             ->group(__DIR__.'/../../routes/api.php');
     }
 

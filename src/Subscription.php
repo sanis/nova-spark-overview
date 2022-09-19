@@ -1,6 +1,6 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview;
+namespace RhysLees\NovaSparkOverview;
 
 use Laravel\Nova\ResourceTool;
 

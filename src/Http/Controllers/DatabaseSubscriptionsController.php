@@ -1,9 +1,12 @@
 <?php
 
-namespace LimeDeck\NovaCashierOverview\Http\Controllers;
+namespace RhysLees\NovaSparkOverview\Http\Controllers;
 
+use Carbon\Carbon;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Subscription;
+use Spark\Plan;
+use Spark\Spark;
 
 class DatabaseSubscriptionsController extends Controller
 {
@@ -32,24 +35,38 @@ class DatabaseSubscriptionsController extends Controller
             ];
         }
 
+        $plan = $billable->sparkPlan();
+
         return [
-            'subscription' => $this->formatSubscription($subscription),
+            'subscription' => $this->formatSubscription($subscription, $plan),
         ];
     }
 
-    /**
-     * @param  \Laravel\Cashier\Subscription  $subscription
-     * @return array
-     */
-    protected function formatSubscription(Subscription $subscription)
+    protected function formatSubscription(Subscription $subscription, Plan $plan)
     {
+        $planName = $subscription->name;
+
+        if ($plan){
+            $planName = $plan->name . ' - ' . $plan->interval;
+        }
+
         return array_merge($subscription->toArray(), [
-            'plan'            => $subscription->stripe_price,
-            'ended'           => $subscription->ended(),
-            'canceled'        => $subscription->canceled(),
-            'active'          => $subscription->active(),
-            'on_trial'        => $subscription->onTrial(),
+            'plan' => $planName,
+            'ended' => $subscription->ended(),
+            'canceled' => $subscription->canceled(),
+            'active' => $subscription->active(),
+            'on_trial' => $subscription->onTrial(),
             'on_grace_period' => $subscription->onGracePeriod(),
+            'created_at' => $this->formatDate($subscription->created_at),
         ]);
+    }
+
+    /**
+     * @param  mixed  $value
+     * @return string|null
+     */
+    protected function formatDate($value)
+    {
+        return $value ? Carbon::parse($value)->toDateTimeString() : null;
     }
 }
