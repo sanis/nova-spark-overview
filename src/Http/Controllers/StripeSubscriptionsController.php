@@ -52,22 +52,12 @@ class StripeSubscriptionsController extends Controller
 
         $plan = $billable->sparkPlan()->name;
 
-        ray($plan);
-
-
         $plans = Spark::plans(strtolower(class_basename($billable)));
-
-        // $plans = $plans->each(function ($plan) {
-        //     ray($plan);
-        //     $plan->price = Plan::price($plan->price);
-        // });
 
         $stripePlans = collect(Plan::all([
             'limit' => 100,
             'active' => true,
         ])->data);
-
-        ray($plans, $stripePlans);
 
         $plans = $plans->each(function ($plan) use ($stripePlans) {
             $stripePlan = $stripePlans->firstWhere('id', $plan->id);
@@ -77,8 +67,6 @@ class StripeSubscriptionsController extends Controller
             $plan->interval = $stripePlan->interval;
             $plan->interval_count = $stripePlan->interval_count;
         });
-
-        ray($plans);
 
         return [
             'subscription' => $this->formatSubscription($subscription, $plan),
@@ -175,7 +163,6 @@ class StripeSubscriptionsController extends Controller
      */
     protected function formatPlans($plans)
     {
-        // ray ($plans->toArray());
         return $plans->map(function ($plan) {
             return [
                 'id' => $plan->id,
