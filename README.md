@@ -1,9 +1,4 @@
-# A Laravel Nova resource tool to manage your Cashier (Stripe) subscriptions
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/rhyslees/nova-spark-overview.svg?style=flat-square)](https://packagist.org/packages/rhyslees/nova-spark-overview)
-[![CircleCI](https://travis-ci.org/RhysLees/nova-spark-overview.svg?branch=master)](https://travis-ci.org/RhysLees/nova-spark-overview)
-[![StyleCI](https://github.styleci.io/repos/223514784/shield?branch=master)](https://github.styleci.io/repos/223514784)
-[![Total Downloads](https://img.shields.io/packagist/dt/rhyslees/nova-spark-overview.svg?style=flat-square)](https://packagist.org/packages/rhyslees/nova-spark-overview)
+# A Laravel Nova resource tool to manage your Spark (Stripe) subscriptions
 
 This [Nova](https://nova.laravel.com) tool lets you:
 
