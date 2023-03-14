@@ -30,7 +30,7 @@
         "php": "^8.2",
         "laravel/nova": "^4.0",
         "laravel/pint": "^1.5",
-        "laravel/spark-stripe": "^3.0"
+        "laravel/spark-stripe": "^4.0"
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",
